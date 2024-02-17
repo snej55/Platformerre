@@ -1,9 +1,9 @@
 # TODO
 
 DONE *Change data.e.scipts.entities.ents (line 100) get_neighbours() to .append to entities.extend(neighbours)* 
-Add fragment / loot with torque
+DONE *Add fragment / loot with torque*
 Add range weapon
-Add enemy AI
+DONE *Add enemy AI*
 DONE *fix dodgy delta time with particles*
 DONE *Add grass*
 DONE *Add leaves*

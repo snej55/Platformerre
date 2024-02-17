@@ -25,7 +25,7 @@ class App(e.Pygmy):
         self.low_color_bottom = pygame.Color(136, 67, 79)
         self.health_flash = [(254, 254, 215), 0]
         #self.items = [AnimatedItem(self.assets['game']['collectables/coin'], self, (xo * 4, 10), (0, -6), self.assets['game']['particle/particle'][0], mass=0.25, bounce=0.9, speed=0.5) for xo in range(100)]#Item(self, (30, 10), (0, -6), self.assets['game']['particle/particle'][0], mass=0.25, bounce=0.9)
-        self.slimes = [Slime((x * 8, -70), (11, 7), (-2, -2), self) for x in range(100)]#[Slime((500, -20), (11, 7), (-2, -2), self), Slime((100, -20), (11, 7), (-2, -2), self), Slime((110, -20), (11, 7), (-2, -2), self), Slime((50, -20), (11, 7), (-2, -2), self)]
+        self.slimes = [Slime((x * 40, -70), (11, 7), (-2, -2), self) for x in range(20)]#[Slime((500, -20), (11, 7), (-2, -2), self), Slime((100, -20), (11, 7), (-2, -2), self), Slime((110, -20), (11, 7), (-2, -2), self), Slime((50, -20), (11, 7), (-2, -2), self)]
     
     def secsec(self):
         self.health_flash[1] = min(self.health_flash[1] + 1 * self.dt, 10)
