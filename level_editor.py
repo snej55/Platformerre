@@ -203,7 +203,7 @@ class Editor():
         if pygame.K_l in self.toggles:
             self.lyrs = (self.lyrs + 1) % 3
             print(self.lyrs)
-        if pygame.K_g in self.toggles:
+        if pygame.K_g in self.toggles and not (self.keys[pygame.K_LCTRL] and pygame.K_g in self.toggles):
             self.on_grid = not self.on_grid
         if self.keys[pygame.K_LSHIFT]:
             self.scroll[1] += self.scrolling * 50

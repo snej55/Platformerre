@@ -139,7 +139,7 @@ class GFXManager:
                     trail[1] = max(1, trail[1])
                     angle = math.pi * 1.5 - random.random() * math.pi * 0.25 + math.pi * 0.125
                     speed = random.random() + 1
-                    self.smoke.append([list(trail[2]), [math.cos(angle) * speed, math.sin(angle) * speed], 1, random.randint(200, 255), 0, random.randint(0, 360), (200, 200, 255)])
+                    self.smoke.append([list(trail[2]), [math.cos(angle) * speed, math.sin(angle) * speed], 1, random.randint(100, 150), 0, random.randint(0, 360), (200, 200, 255)])
             trail[0] -= 1 * self.app.dt
             if trail[0] <= 0:
                 self.trails.remove(trail)             
@@ -178,9 +178,11 @@ class GFXManager:
             slime[1][0] += (slime[1][0] * 0.9 - slime[1][0]) * self.app.dt
             slime[1][1] += (slime[1][1] * 0.9 - slime[1][1]) * self.app.dt
             tile_loc = str(math.floor(slime[0][0] / TILE_SIZE)) + ';' + str(math.floor(slime[0][1] / TILE_SIZE))
+            drawn = 0
             for layer in self.app.world.tile_map.layers:
                 if tile_loc in layer.tile_map:
                     target_tile = layer.tile_map[tile_loc]
+                    img_mask = pygame.mask.from_surface(target_tile.img)
                     prev_img_pos = (prev_pos[0]%TILE_SIZE, prev_pos[1]%TILE_SIZE)
                     img_pos = (slime[0][0]%TILE_SIZE, slime[0][1]%TILE_SIZE)
                     pygame.draw.line(target_tile.img, slime[2], prev_img_pos, img_pos)
@@ -189,6 +191,12 @@ class GFXManager:
                             target_tile.img.set_at((img_pos[0], img_pos[1] + 1), (22, 19, 35))
                     except IndexError:
                         pass
+                    target_tile.img.blit(img_mask.to_surface(setcolor=(0, 0, 0, 0), unsetcolor=(0, 255, 0)), (0, 0))
+                    target_tile.img.set_colorkey((0, 255, 0))
+                    drawn = 1
+                    break
+            if not drawn:
+                pygame.draw.line(surf, slime[2], [prev_pos[0] - scroll[0], prev_pos[1] - scroll[1]], [slime[0][0] - scroll[0], slime[0][1] - scroll[1]])
             if abs(slime[1][0]) < 0.1:
                 if abs(slime[1][1]) < 0.1: # (22, 19, 35)
                     self.slime.pop(i)

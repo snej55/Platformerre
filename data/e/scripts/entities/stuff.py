@@ -37,6 +37,13 @@ class Item:
                 size = random.random() * 2 + 3
                 self.app.world.gfx_manager.glow_circle.append([list(self.pos), [vel * math.cos(angle), vel * math.sin(angle) - 2], size, size, pygame.Color((221, 172, 70)).lerp((219, 188, 150), random.random())])
             return 1
+        if self.app.world.tile_map.physics_map.danger_at(self.rect()):
+            for _ in range(random.randint(4, 6)):
+                angle = random.random() * math.pi * 2
+                vel = random.random() + 1
+                size = random.random() * 2 + 3
+                self.app.world.gfx_manager.glow_circle.append([list(self.pos), [vel * math.cos(angle) * 0.6, vel * math.sin(angle) - 3], size, size, pygame.Color((221, 172, 70)).lerp((219, 188, 150), random.random())])
+            return 1
         force = pygame.Vector2(anchor.x - self.pos.x, anchor.y - self.pos.y) * self.tension
         self.vel += force * self.app.dt
         self.pos += self.vel * self.app.dt

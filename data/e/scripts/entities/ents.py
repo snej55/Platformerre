@@ -327,6 +327,11 @@ class PlayerBase(Entity):
             angle = random.random() * math.pi * 2
             vel = random.random() * 5 + 5
             self.app.world.gfx_manager.splat.append([list(self.rect().center), [math.cos(angle) * vel, math.sin(angle) * vel], random.choice(palette), 3])
+        for _ in range(random.randint(10, 15)):
+            angle = random.random() * math.pi * 2
+            vel = random.random() + 1
+            size = random.random() * 2 + 3
+            self.app.world.gfx_manager.glow_circle.append([list(self.pos), [vel * math.cos(angle), vel * math.sin(angle) - 2], size, size, random.choice(palette), random.random()])
         self.app.world.gfx_manager.shockwaves.append([list(self.rect().center), 0.01, (230, 215, 204), 1.2, 25])
         self.app.world.gfx_manager.trail(40, 2, [self.rect().centerx, self.rect().bottom])
         self.pos = pygame.Vector2(self.spawn_pos)

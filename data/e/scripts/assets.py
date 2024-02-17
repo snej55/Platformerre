@@ -11,8 +11,10 @@ GAME_ASSETS = {'large_decor': load_tile_imgs('decor/large_decor.png', 32),
                'particle/leaf': load_spritesheet('particles', 'leaf'),
                'collectables/coin': load_spritesheet('collectables', 'coin'),
                'health_bar': load_img('misc/health_bar.png'),
-               'enemy_health_bar': load_img('misc/enemy_health_bar.png')}
-EDIT_ASSETS = {'large_decor': load_tile_imgs('decor/large_decor.png', 32)}
+               'enemy_health_bar': load_img('misc/enemy_health_bar.png'),
+               'spawners': load_imgs('spawners')}
+EDIT_ASSETS = {'large_decor': load_tile_imgs('decor/large_decor.png', 32),
+               'spawners': load_imgs('spawners')}
 GAME_ASSETS = load_tile_assets('tiles', GAME_ASSETS, TILE_SIZE)
 EDIT_ASSETS = load_tile_assets('tiles', EDIT_ASSETS, TILE_SIZE)
 load_entity_assets('entities/player', GAME_ASSETS, 'player')

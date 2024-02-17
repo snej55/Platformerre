@@ -13,9 +13,16 @@ class App(e.Pygmy):
         })
         #self.world.tile_map.load('data/maps/0.json')
         #self.world.tile_map.load_leaves('data/config/leaf.json')
-        self.world.window.add_shader('stuff', 'default.frag', 'default.vert')  # add shaders with mgl stuff
         self.world.tile_map.load('data/maps/0.json')
-        self.player = Player((20, 10), (6, 7), (-1, -1), self, vj=-4)
+        self.entities = []
+        player_pos = [10, 10]
+        for spawner in self.world.tile_map.extract([('spawners', 0), ('spawners', 1)]):
+            if spawner.variant == 0:
+                player_pos = list(spawner.pos)
+            elif spawner.variant == 1:
+                self.entities.append(Slime(list(spawner.pos), (11, 7), (-2, -2), self))
+        self.player = Player(player_pos, (6, 7), (-1, -1), self, vj=-4)
+        self.world.window.add_shader('stuff', 'default.frag', 'default.vert')  # add shaders with mgl stuff
         self.world.window.set_camera_target(self.player)
         self.world.window.window.opacity = 1.0
         self.player_health = 0
@@ -25,7 +32,7 @@ class App(e.Pygmy):
         self.low_color_bottom = pygame.Color(136, 67, 79)
         self.health_flash = [(254, 254, 215), 0]
         #self.items = [AnimatedItem(self.assets['game']['collectables/coin'], self, (xo * 4, 10), (0, -6), self.assets['game']['particle/particle'][0], mass=0.25, bounce=0.9, speed=0.5) for xo in range(100)]#Item(self, (30, 10), (0, -6), self.assets['game']['particle/particle'][0], mass=0.25, bounce=0.9)
-        self.slimes = [Slime((x * 40, -70), (11, 7), (-2, -2), self) for x in range(20)]#[Slime((500, -20), (11, 7), (-2, -2), self), Slime((100, -20), (11, 7), (-2, -2), self), Slime((110, -20), (11, 7), (-2, -2), self), Slime((50, -20), (11, 7), (-2, -2), self)]
+        #self.slimes = [Slime((x * 40, -70), (11, 7), (-2, -2), self) for x in range(20)]#[Slime((500, -20), (11, 7), (-2, -2), self), Slime((100, -20), (11, 7), (-2, -2), self), Slime((110, -20), (11, 7), (-2, -2), self), Slime((50, -20), (11, 7), (-2, -2), self)]
     
     def secsec(self):
         self.health_flash[1] = min(self.health_flash[1] + 1 * self.dt, 10)
@@ -36,8 +43,8 @@ class App(e.Pygmy):
         target_health = self.player.health if self.player.ad >= 120 else 0
         self.player_health += (target_health - self.player_health) * 0.2 * self.dt
         surf = pygame.Surface((32, 8))
-        pygame.draw.rect(surf, self.low_color_top.lerp(self.high_color_top, self.player_health / self.player.max_health), (3, 2, 27 * self.player_health / self.player.max_health, 2))
-        pygame.draw.rect(surf, self.low_color_bottom.lerp(self.high_color_bottom, self.player_health / self.player.max_health), (3, 4, 27 * self.player_health / self.player.max_health, 2))
+        pygame.draw.rect(surf, self.low_color_top.lerp(self.high_color_top, max(0, min(1, self.player_health / self.player.max_health))), (3, 2, 27 * max(0, min(1, self.player_health / self.player.max_health)), 2))
+        pygame.draw.rect(surf, self.low_color_bottom.lerp(self.high_color_bottom, max(0, min(1, self.player_health / self.player.max_health))), (3, 4, 27 * max(0, min(1, self.player_health / self.player.max_health)), 2))
         surf.set_colorkey((0, 255, 0))
         surf.blit(self.assets['game']['health_bar'], (0, 0))
         self.world.window.screen.blit(surf, (8, 6))
@@ -52,10 +59,12 @@ class App(e.Pygmy):
         #self.world.tile_map.physics_map.draw(screen, scroll)
         if pygame.K_p in self.toggles:
             print(self.player.pos)
+            self.player.damage(5)
             #for layer in self.world.tile_map.layers:
-             #   layer.stamp(self.assets['game']['large_decor'][0], (20, 80))
+            #   layer.stamp(self.assets['game']['large_decor'][0], (20, 80))
            # self.item.box.vel.y = -5
             #self.item.box.vel.x = 5
+        #self.world.tile_map.physics_map.draw(screen, scroll)
 
     def run(self):
         while self.running:

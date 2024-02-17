@@ -198,7 +198,10 @@ class Layer:
                 tile_loc = str(math.floor(loc[0] / self.tile_size)) + ';' + str(math.floor(loc[1] / self.tile_size))
                 if tile_loc in self.tile_map:
                     tile = self.tile_map[tile_loc]
+                    img_mask = pygame.mask.from_surface(tile.img)
                     tile.img.blit(img, (pos[0] - loc[0], pos[1] - loc[1]))
+                    tile.img.blit(img_mask.to_surface(setcolor=(0, 0, 0, 0), unsetcolor=(0, 255, 0)), (0, 0))
+                    tile.img.set_colorkey((0, 255, 0))
 
     
     def draw_tiles(self, surf, scroll):
@@ -242,14 +245,17 @@ class PhysicsTileMap:
     def load(tile_data):
         tile_map = {}
         for loc in tile_data:
-            tile_map[loc] = PhysicsTile(tile_data[loc]['pos'], tile_data[loc]['dimensions'], tile_data[loc]['rect_offset'], loc)
+            try:
+                tile_map[loc] = PhysicsTile(tile_data[loc]['pos'], tile_data[loc]['dimensions'], tile_data[loc]['rect_offset'], loc, mode=tile_data[loc]['mode'])
+            except KeyError:
+                tile_map[loc] = PhysicsTile(tile_data[loc]['pos'], tile_data[loc]['dimensions'], tile_data[loc]['rect_offset'], loc)
         return tile_map
     
     @staticmethod
     def save(tile_data):
         tile_map = {}
         for loc in tile_data:
-            tile_map[loc] = {'pos': list(tile_data[loc].pos / TILE_SIZE), 'rect_offset': tile_data[loc].rect_offset.copy(), 'dimensions': list(tile_data[loc].dimensions)}
+            tile_map[loc] = {'pos': list(tile_data[loc].pos / TILE_SIZE), 'rect_offset': tile_data[loc].rect_offset.copy(), 'dimensions': list(tile_data[loc].dimensions), 'mode': tile_data[loc].mode}
         return tile_map
     
     def solid_check(self, pos):
@@ -289,7 +295,8 @@ class PhysicsTileMap:
     
     def physics_rects_around(self, pos):
         for tile in self.tiles_around(pos):
-            yield tile.rect
+            if not (tile.mode in self.app.danger):
+                yield tile.rect
     
     def draw(self, surf, scroll):
         for loc in self.tile_map:

@@ -64,7 +64,7 @@ class Slime(Entity):
         for _ in range(random.randint(15, 20)):
             angle = random.random() * math.pi * 2
             speed = random.random() + 1
-            self.app.world.gfx_manager.smoke.append([list(self.rect().center), [math.cos(angle) * speed, math.sin(angle) * speed], 1, random.randint(200, 255), 0, random.randint(0, 360), (200, 200, 255)])
+            self.app.world.gfx_manager.smoke.append([list(self.rect().center), [math.cos(angle) * speed, math.sin(angle) * speed], 1, random.randint(100, 150), 0, random.randint(0, 360), (200, 200, 255)])
         for _ in range(random.randint(5, 10)):
             angle = random.random() * math.pi * 2
             speed = random.random() * 10
@@ -82,7 +82,7 @@ class Slime(Entity):
             angle = random.random() * math.pi * 2
             vel = random.random() * 5 + 2
             self.app.world.gfx_manager.add_kickup(self.rect().center, (math.cos(angle) * vel * 0.25, math.sin(angle) * vel * 2), random.choice(palette), random.randint(100, 200), friction=0.95, flags=pygame.BLEND_RGBA_ADD, bounce=0.5)
-            if i % 3 == 0: self.app.world.gfx_manager.add_glow_dust(self.rect().center, (math.cos(angle) * vel * 0.2, math.sin(angle) * vel * 1.5), random.choice(palette), random.randint(100, 200), friction=0.95, bounce=0.5, flags=pygame.BLEND_RGBA_ADD)
+            if i % 8 == 0: self.app.world.gfx_manager.add_glow_dust(self.rect().center, (math.cos(angle) * vel * 0.2, math.sin(angle) * vel * 1.5), random.choice(palette), random.randint(100, 200), friction=0.95, bounce=0.5, flags=pygame.BLEND_RGBA_ADD)
         self.app.world.gfx_manager.radial(self.rect().center)
         for _ in range(5):
             angle = random.random() * math.pi * 2
@@ -97,6 +97,11 @@ class Slime(Entity):
             self.app.world.gfx_manager.timed_coins.append([0, random.randint(1, 3) * 60, self.rect().center])
         for _ in range(random.randint(15, 30)):
             self.app.world.gfx_manager.timed_coins.append([0, random.randint(100, 1000) * 60, self.rect().center])
+        for _ in range(random.randint(10, 15)):
+            angle = random.random() * math.pi * 2
+            vel = random.random() + 1
+            size = random.random() * 2 + 3
+            self.app.world.gfx_manager.glow_circle.append([list(self.pos), [vel * math.cos(angle), vel * math.sin(angle) - 2], size, size, random.choice(palette), random.random()])
     
     def damage(self, intt, direction=math.pi * 0.5):
         self.app.world.window.camera.add_screen_shake(3.5)
@@ -107,19 +112,24 @@ class Slime(Entity):
         palette = self.palette()
         self.state = state
         attack_dir = direction
+        for _ in range(random.randint(10, 15)):
+            angle = random.random() * math.pi * 2
+            vel = random.random() + 1
+            size = random.random() * 2 + 3
+            self.app.world.gfx_manager.glow_circle.append([list(self.pos), [vel * math.cos(angle), vel * math.sin(angle) - 2], size, size, random.choice(palette), random.random()])
         for _ in range(4):
             angle = attack_dir + random.random() * math.pi * 0.25 - math.pi * 0.125
             self.app.world.gfx_manager.sparks.append(Spark([self.app.player.rect().centerx, self.app.player.rect().bottom], angle, random.random() + 1, (254, 254, 215), decay=1))
         for _ in range(random.randint(4, 5)):
             angle = random.random() * math.pi * 2
             speed = random.random()
-            self.app.world.gfx_manager.smoke.append([list(self.rect().center), [math.cos(angle) * speed, math.sin(angle) * speed], 0.5, random.randint(200, 255), 0, random.randint(0, 360), (200, 200, 255)])
+            self.app.world.gfx_manager.smoke.append([list(self.rect().center), [math.cos(angle) * speed, math.sin(angle) * speed], 0.5, random.randint(100, 150), 0, random.randint(0, 360), (200, 200, 255)])
         for _ in range(random.randint(10, 20)):
             angle = random.random() * math.pi * 2
             vel = random.random() * 2 + 2
             self.app.world.gfx_manager.add_kickup(self.rect().center, [math.cos(angle) * vel, math.sin(angle) * vel], random.choice(palette), random.randint(100, 200), friction=0.95, bounce=0.5)
             #self.app.world.gfx_manager.add_kickup(self.rect().center, [math.cos(angle) * vel, math.sin(angle) * vel], random.choice(palette), random.randint(100, 200))
-        for _ in range(random.randint(20, 40)):
+        for _ in range(random.randint(10, 20)):
             angle = random.random() * math.pi * 2
             vel = random.random() * 2 + 2
             self.app.world.gfx_manager.splat.append([list(self.rect().center), [math.cos(angle) * vel, math.sin(angle) * vel], pygame.Color(self.slime).lerp((22, 19, 35), random.random() * 0.5), 2])

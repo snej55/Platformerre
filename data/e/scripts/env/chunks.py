@@ -75,10 +75,10 @@ class StationaryQuads:
         self.chunk_data[loc].append(item)
 
     def updateables(self, surf, scroll):
-        for y in range(math.ceil(surf.get_height() / (self.chunk_size.y * TILE_SIZE)) + 1):
-              for x in range(math.ceil(surf.get_width() / (self.chunk_size.x * TILE_SIZE)) + 1):
-                  target_x = x - 1 + math.ceil(scroll.x / (self.chunk_size.x * TILE_SIZE))
-                  target_y = y - 1 + math.ceil(scroll.y / (self.chunk_size.y * TILE_SIZE))
+        for y in range(math.ceil(surf.get_height() / (self.chunk_size.y * TILE_SIZE)) + 2):
+              for x in range(math.ceil(surf.get_width() / (self.chunk_size.x * TILE_SIZE)) + 2):
+                  target_x = x - 2 + math.ceil(scroll.x / (self.chunk_size.x * TILE_SIZE))
+                  target_y = y - 2 + math.ceil(scroll.y / (self.chunk_size.y * TILE_SIZE))
                   target_chunk = f'{target_x};{target_y}'
                   if target_chunk in self.chunk_data:
                       for item in self.chunk_data[target_chunk]:
