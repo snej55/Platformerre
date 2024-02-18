@@ -21,8 +21,8 @@ class App(e.Pygmy):
                 player_pos = list(spawner.pos)
             elif spawner.variant == 1:
                 self.entities.append(Slime(list(spawner.pos), (11, 7), (-2, -2), self))
-        self.player = Player(player_pos, (6, 7), (-1, -1), self, vj=-4)
-        self.world.window.add_shader('stuff', 'default.frag', 'default.vert')  # add shaders with mgl stuff
+        self.player = Player(player_pos, (6, 7), (-1, -1), self, vj=-3.56, vx=1.0, friction=0.61, air_friction=0.66)
+        self.world.window.add_shader('stuff', 'stuff.frag', 'default.vert')  # add shaders with mgl stuff
         self.world.window.set_camera_target(self.player)
         self.world.window.window.opacity = 1.0
         self.player_health = 0

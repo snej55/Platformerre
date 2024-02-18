@@ -411,7 +411,7 @@ class PlayerBase(Entity):
                         self.flipped = True
                     self.wall_slide = True
                     self.falling = self.fall_buff
-                    self.movement[1] = min(self.movement[1], 1.5)
+                    self.movement[1] = min(self.movement[1], 1.0)
                     if random.random() / self.app.dt < 0.2:
                         pass
             #      if self.controls['up']:
