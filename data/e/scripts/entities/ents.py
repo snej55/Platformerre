@@ -367,7 +367,7 @@ class PlayerBase(Entity):
             self.jumping += self.jump_tim * self.app.dt
             if self.hurt > 3:
                 self.controls = {'up': self.controls['up'], 'down': self.app.keys[pygame.K_DOWN] or self.app.keys[pygame.K_s], 'left': self.app.keys[pygame.K_LEFT] or self.app.keys[pygame.K_a], 'right': self.app.keys[pygame.K_RIGHT] or self.app.keys[pygame.K_d], 'climb': self.app.keys[pygame.K_UP] or self.app.keys[pygame.K_w]}
-                if pygame.K_z in self.app.toggles and abs(self.dashing) < 40:
+                if (pygame.K_z in self.app.toggles or pygame.K_k in self.app.toggles) and abs(self.dashing) < 40:
                     self.app.world.window.camera.add_screen_shake(3.5)
                     if self.flipped:
                         self.dashing = -60

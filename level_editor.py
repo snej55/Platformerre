@@ -195,6 +195,7 @@ class Editor():
     
     def update(self):
         self.screen.fill((0, 0, 0))
+        
         if not self.keys[pygame.K_RCTRL]: self.scroll[0] += (self.keys[pygame.K_d] - self.keys[pygame.K_a]) * 2; self.scroll[1] += (self.keys[pygame.K_s] - self.keys[pygame.K_w]) * 2
         if pygame.K_t in self.toggles:
             self.tile_map.layers[self.layer].auto_tile()
@@ -224,6 +225,10 @@ class Editor():
             self.tile_map.layers.append(Layer(self.tile_map, {'tile_map': {}, 'decor': [], 'solid': False, 'render_scale': 1.0}, self, mode='edit', index=len(self.tile_map.layers)))
             print(len(self.tile_map.layers))
         render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
+        self.draw_grid(render_scroll, [1, 1], (50, 50, 50))
+        self.draw_grid(render_scroll, CHUNK_SIZE, (100, 50, 0))
+        self.draw_grid(render_scroll, WATER_CHUNK_SIZE, (0, 0, 100))
+        self.draw_grid(render_scroll, ENTITY_QUAD_SIZE, (100, 0, 0))
         if self.lyrs == 0:
             layers = self.tile_map.layers.copy()
             for i, layer in enumerate(layers):
@@ -241,10 +246,6 @@ class Editor():
                 layer.index = i
             self.tile_map.draw_decor(self.screen, self.scroll)
             self.tile_map.draw_tiles(self.screen, self.scroll)
-        self.draw_grid(render_scroll, [1, 1], (50, 50, 50))
-        self.draw_grid(render_scroll, CHUNK_SIZE, (100, 50, 0))
-        self.draw_grid(render_scroll, WATER_CHUNK_SIZE, (0, 0, 100))
-        self.draw_grid(render_scroll, ENTITY_QUAD_SIZE, (100, 0, 0))
         pygame.draw.line(self.screen, (255, 255, 255), (-render_scroll[0], -render_scroll[1]), (self.screen.get_width(), -render_scroll[1]))
         pygame.draw.line(self.screen, (255, 255, 255), (-render_scroll[0], -render_scroll[1]), (-render_scroll[0], self.screen.get_height()))
         current_tile_img = self.assets['edit'][self.tile_list[self.tile_group]][self.tile_variant].copy()

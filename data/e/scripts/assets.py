@@ -1,7 +1,7 @@
 from .tools.utils import *
 from .bip import TILE_SIZE
 
-GAME_ASSETS = {'large_decor': load_tile_imgs('decor/large_decor.png', 32),
+GAME_ASSETS = {'large_decor': load_tile_imgs('decor/large_decor.png', 50),
                'gras': load_spritesheet('grass', 'grass'),
                'sword': load_img('entities/sword.png'),
                'slash': load_spritesheet('vfx', 'slash'),
@@ -12,8 +12,13 @@ GAME_ASSETS = {'large_decor': load_tile_imgs('decor/large_decor.png', 32),
                'collectables/coin': load_spritesheet('collectables', 'coin'),
                'health_bar': load_img('misc/health_bar.png'),
                'enemy_health_bar': load_img('misc/enemy_health_bar.png'),
-               'spawners': load_imgs('spawners')}
-EDIT_ASSETS = {'large_decor': load_tile_imgs('decor/large_decor.png', 32),
+               'spawners': load_imgs('spawners'),
+               'blaster': load_img('blasters/blaster.png'),
+               'lasers': {
+                   'red': load_img('blasters/laser_red.png'),
+                   'blue': load_img('blasters/laser.png')
+               }}
+EDIT_ASSETS = {'large_decor': load_tile_imgs('decor/large_decor.png', 50),
                'spawners': load_imgs('spawners')}
 GAME_ASSETS = load_tile_assets('tiles', GAME_ASSETS, TILE_SIZE)
 EDIT_ASSETS = load_tile_assets('tiles', EDIT_ASSETS, TILE_SIZE)

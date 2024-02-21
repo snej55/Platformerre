@@ -119,7 +119,6 @@ class GrassTile:
         if key in self.img_cache:
             return self.img_cache[key]
         return self.default_surf
-
     # use this when dealing with a lot of grass
     # it doesn't look as good tho
     def tile_draw(self, dt, surf, scroll=(0, 0)):

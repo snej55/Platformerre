@@ -105,6 +105,17 @@ class Layer:
                 self.decor.append(tile.copy())
                 del self.tile_map[loc]
         self.decor_chunker = TileChunker(self.decor, self.app.chunk_size, TILE_SIZE)
+        self.tile_chunks = self.load_tile_chunks()
+    
+    def load_tile_chunks(self):
+        tile_chunks = {}
+        for loc in self.tile_map:
+            tile = self.tile_map[loc]
+            aloc = str(math.floor(tile.pos.x / self.tile_size / TILE_CHUNK_SIZE[0])) + ';' + str(math.floor(tile.pos.y / self.tile_size / TILE_CHUNK_SIZE[1]))
+            if not (aloc in tile_chunks):
+                tile_chunks[aloc] = pygame.Surface((self.tile_size * TILE_CHUNK_SIZE[0], self.tile_size * TILE_CHUNK_SIZE[1]))
+            tile_chunks[aloc].blit(tile.img, (tile.pos[0]%(self.tile_size * TILE_CHUNK_SIZE[0]), tile.pos[1]%(self.tile_size * TILE_CHUNK_SIZE[1])))
+        return tile_chunks
     
     def save(self):
         tile_map = {}
@@ -223,6 +234,13 @@ class Layer:
                 if loc in self.tile_map:
                     tile = self.tile_map[loc]
                     tile.draw(surf, pygame.Vector2(math.floor(scroll.x), math.floor(scroll.y)))
+    
+    def draw_tile_chunks(self, surf, scroll):
+        for x in range(math.floor(scroll.x / self.tile_size / TILE_CHUNK_SIZE[0]), math.floor((scroll.x + surf.get_width()) // (self.tile_size * TILE_CHUNK_SIZE[0]) + 1)):
+            for y in range(math.floor(scroll.y // (self.tile_size * TILE_CHUNK_SIZE[1])), math.floor((scroll.y + surf.get_height()) // (self.tile_size * TILE_CHUNK_SIZE[1]) + 1)):
+                loc = str(x) + ';' + str(y)
+                if loc in self.tile_chunks:
+                    surf.blit(self.tile_chunks[loc], (x * self.tile_size * TILE_CHUNK_SIZE[0] - math.floor(scroll.x), y * self.tile_size * TILE_CHUNK_SIZE[1] - math.floor(scroll.y)))
 
 PHYSICS_COLOURS = {'block': (255, 255, 255), 'danger': (255, 0, 0)}
 

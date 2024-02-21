@@ -4,6 +4,7 @@ import data.e.scripts as e
 #from data.e.scripts.entities.stuff import AnimatedItem, Item
 from data.e.scripts.env.tiles import *
 from data.scripts.entities import Player, Slime
+from data.scripts.blasters import BLaserManager, Blaster
 from data.e.scripts.tools.utils import outline
 
 class App(e.Pygmy):
@@ -33,7 +34,9 @@ class App(e.Pygmy):
         self.health_flash = [(254, 254, 215), 0]
         #self.items = [AnimatedItem(self.assets['game']['collectables/coin'], self, (xo * 4, 10), (0, -6), self.assets['game']['particle/particle'][0], mass=0.25, bounce=0.9, speed=0.5) for xo in range(100)]#Item(self, (30, 10), (0, -6), self.assets['game']['particle/particle'][0], mass=0.25, bounce=0.9)
         #self.slimes = [Slime((x * 40, -70), (11, 7), (-2, -2), self) for x in range(20)]#[Slime((500, -20), (11, 7), (-2, -2), self), Slime((100, -20), (11, 7), (-2, -2), self), Slime((110, -20), (11, 7), (-2, -2), self), Slime((50, -20), (11, 7), (-2, -2), self)]
-    
+        self.blaser_manager = BLaserManager(self)
+        self.blaster = Blaster(self, self.assets['game']['blaster'], [10, 10], [0, 0])
+
     def secsec(self):
         self.health_flash[1] = min(self.health_flash[1] + 1 * self.dt, 10)
         if self.player.health > self.player.max_health * 0.15:
@@ -65,6 +68,10 @@ class App(e.Pygmy):
            # self.item.box.vel.y = -5
             #self.item.box.vel.x = 5
         #self.world.tile_map.physics_map.draw(screen, scroll)
+        #for layer in self.world.tile_map.layers:
+        #    layer.draw_tile_chunks(screen, scroll)
+        self.blaser_manager.update(screen, scroll)
+        self.blaster.draw(screen, scroll)
 
     def run(self):
         while self.running:

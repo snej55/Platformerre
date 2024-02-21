@@ -11,10 +11,10 @@ class TileChunker:
         self.chunk_data = load_chunks(self.tiles, self.tile_size, self.chunk_size, {})
     
     def draw(self, surf, scroll):
-        for y in range(math.ceil(surf.get_height() / (self.chunk_size.y * self.tile_size)) + 1):
-            for x in range(math.ceil(surf.get_width() / (self.chunk_size.x * self.tile_size)) + 1):
-                target_x = x - 1 + math.ceil(scroll.x / (self.chunk_size.x * self.tile_size))
-                target_y = y - 1 + math.ceil(scroll.y / (self.chunk_size.y * self.tile_size))
+        for y in range(math.ceil(surf.get_height() / (self.chunk_size.y * self.tile_size)) + 2):
+            for x in range(math.ceil(surf.get_width() / (self.chunk_size.x * self.tile_size)) + 2):
+                target_x = x - 2 + math.ceil(scroll.x / (self.chunk_size.x * self.tile_size))
+                target_y = y - 2 + math.ceil(scroll.y / (self.chunk_size.y * self.tile_size))
                 target_chunk = f'{target_x};{target_y}'
                 if target_chunk in self.chunk_data:
                     for tile in self.chunk_data[target_chunk]:

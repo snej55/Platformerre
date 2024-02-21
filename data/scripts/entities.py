@@ -20,7 +20,7 @@ class Player(PlayerBase):
         stuff = super().update(*args)
         if self.ad >= 120:
             self.outside += (self.outside * 0.96 - self.outside) * self.app.dt
-            if pygame.K_x in self.app.toggles and self.sword.attacked > 10:
+            if (pygame.K_x in self.app.toggles or pygame.K_j in self.app.toggles) and self.sword.attacked > 10:
                 self.sword.attack()
             self.sword.update()
         return stuff

@@ -1,2 +1,1 @@
-
-        super().__init__(config={
+1]
