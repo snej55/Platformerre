@@ -47,12 +47,17 @@ class BLaser:
     def __init__(self, app, angle, speed, color, pos):
         self.app = app
         self.color = color
+        self.angle = angle
+        self.speed = speed
         self.pos = pygame.Vector2(pos)
-        self.vel = [math.cos(angle) * speed, math.sin(angle) * speed]
+        self.vel = [math.cos(angle) * speed, math.sin(-angle) * speed]
         if self.color in self.app.assets['game']['lasers']:
             self.img = self.app.assets['game']['lasers'][self.color]
         else: self.img = self.app.assets['game']['lasers'][self.app.assets['game']['lasers'].keys()[0]]
         self.app.blaser_manager.load_chunks([self])
+    
+    def die(self):
+        pass
     
     def update(self):
         kill = 0
@@ -64,16 +69,20 @@ class BLaser:
         return kill
 
     def draw(self, surf, scroll):
-        img_copy = pygame.transform.rotate(self.img, math.degrees(self.angle + 0.25 * math.pi))
+        img_copy = pygame.transform.rotate(self.img, math.degrees(self.angle))
         surf.blit(img_copy, (self.pos[0] + int(self.img.get_width() / 2) - int(img_copy.get_width() / 2) - scroll[0], self.pos[1] + int(self.img.get_height() / 2) - int(img_copy.get_height() / 2) - scroll[1]))
 
 class Blaster:
-    def __init__(self, app, img, pos, target):
+    def __init__(self, app, img, pos, target, color):
         self.pos = pygame.Vector2(pos)
         self.target = target
+        self.color = color
         self.app = app
         self.img = img
         self.flipped = False
+    
+    def fire(self, angle=0, speed=5):
+        return BLaser(self.app, angle, speed, self.color, self.pos)
     
     def draw(self, surf, scroll, offset=(0, 0)):
         surf.blit(pygame.transform.flip(self.img, self.flipped, False), (self.pos[0] - scroll[0] + offset[0], self.pos[1] - scroll[1] + offset[1]))

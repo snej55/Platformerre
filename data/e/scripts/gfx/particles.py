@@ -122,15 +122,16 @@ class Particle:
         self.animation = self.game.assets['game']['particle/' + self.particle_type].copy()
         self.alpha = 255
         if self.particle_type == 'leaf':
-            self.alpha = 100
+            self.alpha = 10
         self.frame = frame % len(self.animation)
         self.done = False
         self.speed = 0.1
         self.solid = solid
         self.friction = pygame.Vector2(friction)
+        self.timer = 0
     
     def img(self):
-        self.frame += self.speed * self.game.dt
+        self.frame += max(0.025, self.speed) * self.game.dt
         if self.frame >= len(self.animation):
             self.done = True
             return self.animation[-1]
@@ -164,11 +165,23 @@ class Particle:
                 self.vel[1] = 0
                 self.vel[0] = 0
                 self.speed = 0
+        self.timer += 1 * self.game.dt
+        if self.timer > 600:
+            kill = True
+            print(f'''
+        solid: {self.solid}
+        particle_type: {self.particle_type}
+        done: {self.done}
+        alpha: {self.alpha}
+        frame: {self.frame}
+        anim: {len(self.animation)}
+        speed: {self.speed}
+    ''')
         return kill
     
     def draw(self, surf, scroll):
+        img = self.img()
         if self.pos in self.game:
-            img = self.img()
             img.set_alpha(self.alpha)
             surf.blit(img, (self.pos[0] - scroll[0] - img.get_width() // 2, self.pos[1] - scroll[1] - img.get_height() // 2))
 

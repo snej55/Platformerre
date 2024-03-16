@@ -14,7 +14,6 @@ class GFXManager:
         self.smoke = []
         self.impact = []
         self.shockwaves = []
-        self.particle_systems = []
         self.shadows = []
         self.particle_systems = {}
         self.kick_up = []
@@ -116,14 +115,14 @@ class GFXManager:
                 self.timed_coins.remove(timed_coin)
         for system in self.particle_systems:
             self.particle_systems[system].update(self.app.world.window.alpha_surf, scroll)
-        for particle in self.particles.copy():
+        for i, particle in sorted(enumerate(self.particles), reverse=True):
             kill = particle.update()
             if particle.particle_type == 'leaf' and (not particle.done):
                 particle.pos[0] += math.sin(particle.frame * 0.08) * 0.8 * self.app.dt - 0.5 * self.app.dt
                 particle.vel[1] = min(0.2, particle.vel[1] + 0.005 * self.app.dt)
             particle.draw(surf, scroll)
             if kill:
-                self.particles.remove(particle)
+                self.particles.pop(i)
         for glow in self.glow_circle.copy():
             glow[0][0] += glow[1][0] * self.app.dt * glow[2] / glow[3]
             glow[0][1] += glow[1][1] * self.app.dt * glow[2] / glow[3]

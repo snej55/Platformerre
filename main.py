@@ -1,4 +1,4 @@
-import pygame, math
+import pygame, math, random
 import data.e.scripts as e
 
 #from data.e.scripts.entities.stuff import AnimatedItem, Item
@@ -35,7 +35,7 @@ class App(e.Pygmy):
         #self.items = [AnimatedItem(self.assets['game']['collectables/coin'], self, (xo * 4, 10), (0, -6), self.assets['game']['particle/particle'][0], mass=0.25, bounce=0.9, speed=0.5) for xo in range(100)]#Item(self, (30, 10), (0, -6), self.assets['game']['particle/particle'][0], mass=0.25, bounce=0.9)
         #self.slimes = [Slime((x * 40, -70), (11, 7), (-2, -2), self) for x in range(20)]#[Slime((500, -20), (11, 7), (-2, -2), self), Slime((100, -20), (11, 7), (-2, -2), self), Slime((110, -20), (11, 7), (-2, -2), self), Slime((50, -20), (11, 7), (-2, -2), self)]
         self.blaser_manager = BLaserManager(self)
-        self.blaster = Blaster(self, self.assets['game']['blaster'], [10, 10], [0, 0])
+        self.blaster = Blaster(self, self.assets['game']['blaster'], [10, 10], [0, 0], 'red')
 
     def secsec(self):
         self.health_flash[1] = min(self.health_flash[1] + 1 * self.dt, 10)
@@ -62,7 +62,23 @@ class App(e.Pygmy):
         #self.world.tile_map.physics_map.draw(screen, scroll)
         if pygame.K_p in self.toggles:
             print(self.player.pos)
-            self.player.damage(5)
+            print(f'''sparks: {len(self.world.gfx_manager.sparks)}
+smoke: {len(self.world.gfx_manager.smoke)}
+impact: {len(self.world.gfx_manager.impact)}
+shockwaves: {len(self.world.gfx_manager.shockwaves)}
+kick_up: {len(self.world.gfx_manager.kick_up)}
+shadows: {len(self.world.gfx_manager.shadows)}
+glow_dust: {len(self.world.gfx_manager.glow_dust)}
+slime: {len(self.world.gfx_manager.slime)}
+glow: {len(self.world.gfx_manager.glow)}
+particles: {len([particle for particle in self.world.gfx_manager.particles if particle.particle_type == 'particle'])}
+splat: {len(self.world.gfx_manager.splat)}
+trails: {len(self.world.gfx_manager.trails)}
+timed_coins: {len(self.world.gfx_manager.timed_coins)}
+glow_circle: {len(self.world.gfx_manager.glow_circle)}
+''')
+            #self.player.damage(5)
+            self.blaster.fire(angle=random.random() - 0.5)
             #for layer in self.world.tile_map.layers:
             #   layer.stamp(self.assets['game']['large_decor'][0], (20, 80))
            # self.item.box.vel.y = -5

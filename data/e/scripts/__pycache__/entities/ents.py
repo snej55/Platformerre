@@ -295,7 +295,7 @@ class PlayerBase(Entity):
         self.sec()
     
     def die(self):
-        self.app.world.tick.slomo = 0.0000001
+        self.app.world.tick.slomo = 0.000001
         self.app.world.window.camera.add_screen_shake(8)
         #angle = math.atan2(-self.app.player.pos.y + self.pos.y, self.app.player.pos.x - self.pos.x)
         #dis = math.sqrt((self.app.player.pos.y - self.pos.y) ** 2 + (self.app.player.pos.x - self.pos.x) ** 2) ** 3 * 0.1
@@ -346,7 +346,6 @@ class PlayerBase(Entity):
     
     def damage(self, intt=1):
         palette = self.palette()
-        self.app.world.tick.slomo = 0.00000000001
         for _ in range(40):
             angle = random.random() * math.pi * 2
             vel = random.random() * 2 + 3

@@ -1,6 +1,7 @@
 import pygame, math, random
 
-from data.e.scripts.entities.stuff import AnimatedItem
+#from data.e.scripts.entities.stuff import AnimatedItem
+from .blasters import Blaster
 from data.e.scripts.entities.ents import Entity, PlayerBase
 from data.e.scripts.gfx.particles import Particle
 from data.e.scripts.gfx.sparks import Spark
@@ -14,25 +15,34 @@ class Player(PlayerBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.sword = Sword(self.app, self.pos, self, offset=(-1, -6))
+        self.blaster = Blaster(self.app, self.app.assets['game']['blaster'], self.pos, self, 'red')
         self.sec()
+        self.attack_mode = 'sword'
     
     def update(self, *args):
         stuff = super().update(*args)
         if self.ad >= 120:
             self.outside += (self.outside * 0.96 - self.outside) * self.app.dt
-            if (pygame.K_x in self.app.toggles or pygame.K_j in self.app.toggles) and self.sword.attacked > 10:
-                self.sword.attack()
-            self.sword.update()
+            if self.attack_mode == 'sword':
+                if (pygame.K_x in self.app.toggles or pygame.K_j in self.app.toggles) and self.sword.attacked > 10:
+                    self.sword.attack()
+                self.sword.update()
+            elif self.attack_mode == 'blaster':
+                pass
+            if (pygame.K_e in self.app.toggles or pygame.K_v in self.app.toggles):
+                if self.attack_mode == 'blaster':
+                    self.attack_mode = 'sword'
+                else: self.attack_mode = 'blaster'
         return stuff
     
     def draw(self, surf, scroll=(0, 0)):
         if self.ad >= 120:
             if abs(self.dashing) < 50:
-                if self.sword.target_dir == -math.pi * 0.25:
+                if self.sword.target_dir == -math.pi * 0.25 and self.attack_mode == 'sword':
                     self.sword.draw(surf, scroll)
                     return super().draw(surf, scroll)
                 super().draw(surf, scroll)
-                self.sword.draw(surf, scroll)
+                if self.attack_mode == 'sword': self.sword.draw(surf, scroll)
 
 class Slime(Entity):
     def __init__(self, pos, dimensions, anim_offset, app, color='green', slime=(99, 159, 91)):
@@ -54,7 +64,6 @@ class Slime(Entity):
         self.sec()
 
     def die(self):
-        self.app.world.tick.slomo = 0.00001
         self.app.world.window.camera.add_screen_shake(6)
         #angle = math.atan2(-self.app.player.pos.y + self.pos.y, self.app.player.pos.x - self.pos.x)
         #dis = math.sqrt((self.app.player.pos.y - self.pos.y) ** 2 + (self.app.player.pos.x - self.pos.x) ** 2) ** 3 * 0.1
@@ -95,7 +104,7 @@ class Slime(Entity):
             self.app.world.gfx_manager.trail(20, 2, [self.rect().centerx, self.rect().bottom])
         for _ in range(random.randint(2, 5)):
             self.app.world.gfx_manager.timed_coins.append([0, random.randint(1, 3) * 60, self.rect().center])
-        for _ in range(random.randint(15, 30)):
+        for _ in range(random.randint(1, 3)):
             self.app.world.gfx_manager.timed_coins.append([0, random.randint(100, 1000) * 60, self.rect().center])
         for _ in range(random.randint(10, 15)):
             angle = random.random() * math.pi * 2
