@@ -6,6 +6,7 @@ from data.e.scripts.env.tiles import *
 from data.scripts.entities import Player, Slime
 from data.scripts.blasters import BLaserManager, Blaster
 from data.e.scripts.tools.utils import outline
+from data.e.scripts.gfx.lighting import Lighting
 
 class App(e.Pygmy):
     def __init__(self):
@@ -37,6 +38,10 @@ class App(e.Pygmy):
         self.blaser_manager = BLaserManager(self)
         self.blaster = Blaster(self, self.assets['game']['blaster'], [10, 10], [0, 0], 'red')
 
+        self.lighting = Lighting(self)
+        self.light = self.lighting.add_light(self.player.pos, [200, 200])
+        self.light_surf = self.lighting.update_lighting([0, 0])
+
     def secsec(self):
         self.health_flash[1] = min(self.health_flash[1] + 1 * self.dt, 10)
         if self.player.health > self.player.max_health * 0.15:
@@ -57,6 +62,7 @@ class App(e.Pygmy):
             self.player.die()
         #self.item.box.draw(screen, scroll)
         self.player.draw(screen, scroll)
+        self.light.update(self.player.pos)
         #self.item.update(screen, scroll)
         #self.world.tile_map.leaves(screen, scroll)
         #self.world.tile_map.physics_map.draw(screen, scroll)
@@ -88,6 +94,7 @@ glow_circle: {len(self.world.gfx_manager.glow_circle)}
         #    layer.draw_tile_chunks(screen, scroll)
         self.blaser_manager.update(screen, scroll)
         self.blaster.draw(screen, scroll)
+        self.light_surf = self.lighting.update_lighting(scroll)
 
     def run(self):
         while self.running:

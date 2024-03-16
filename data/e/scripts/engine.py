@@ -107,7 +107,7 @@ class Pygmy:
             self.close()
         if not shade_uniforms:
             screen_tex = self.world.window.mgl.surf_to_texture(self.world.window.screen)
-            shade_uniforms = {'stuff': {'slomo': self.world.tick.slomo, 'tex': screen_tex, 'alpha_surf': self.world.window.alpha_surf, 'ui_surf': self.world.window.ui_surf}}
+            shade_uniforms = {'stuff': {'slomo': self.world.tick.slomo, 'tex': screen_tex, 'alpha_surf': self.world.window.alpha_surf, 'lighting': self.light_surf}}
         self.world.update(shade_uniforms=shade_uniforms)
         self.scroll = self.world.window.render_scroll
         self.dt = self.world.tick.dt
