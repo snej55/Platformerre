@@ -17,6 +17,7 @@ class App(e.Pygmy):
         #self.world.tile_map.load_leaves('data/config/leaf.json')
         self.world.tile_map.load('data/maps/0.json')
         self.entities = []
+        self.lighting = Lighting(self)
         player_pos = [10, 10]
         for spawner in self.world.tile_map.extract([('spawners', 0), ('spawners', 1)]):
             if spawner.variant == 0:
@@ -37,17 +38,16 @@ class App(e.Pygmy):
         #self.slimes = [Slime((x * 40, -70), (11, 7), (-2, -2), self) for x in range(20)]#[Slime((500, -20), (11, 7), (-2, -2), self), Slime((100, -20), (11, 7), (-2, -2), self), Slime((110, -20), (11, 7), (-2, -2), self), Slime((50, -20), (11, 7), (-2, -2), self)]
         self.blaser_manager = BLaserManager(self)
         self.blaster = Blaster(self, self.assets['game']['blaster'], [10, 10], [0, 0], 'red')
-
-        self.lighting = Lighting(self)
-        self.light = self.lighting.add_light(self.player.pos, [200, 200])
+        self.light = self.lighting.add_light(self.player.pos, [256, 256], color=(254, 254, 215))#(219, 188, 150))
         self.light_surf = self.lighting.update_lighting([0, 0])
+        self.fire_flies = [[[random.random() * self.world.window.screen.get_width(), random.random() * self.world.window.screen.get_height()], random.random() * math.pi * 2, random.random() * 10 + 10, random.random() * 4 * random.choice([-1, 1]), self.lighting.add_light([0, 0], [5, 5], (221, 172, 70)), random.random()] for _ in range(20)]
 
     def secsec(self):
         self.health_flash[1] = min(self.health_flash[1] + 1 * self.dt, 10)
         if self.player.health > self.player.max_health * 0.15:
-            outline(self.assets['game']['health_bar'], (8, 6), self.world.window.screen, pygame.Color(22, 19, 35).lerp(self.health_flash[0], 1 - self.health_flash[1] * 0.1))
+            outline(self.assets['game']['health_bar'], (8, 6), self.world.window.ui_surf, pygame.Color(22, 19, 35).lerp(self.health_flash[0], 1 - self.health_flash[1] * 0.1))
         else:
-            outline(self.assets['game']['health_bar'], (8, 6), self.world.window.screen, pygame.Color(22, 19, 35).lerp((254, 254, 215), (math.sin(self.time * 0.1) + 1) * 0.5).lerp((194, 89, 64), (math.sin(self.time * 0.037) + 1) * 0.5))
+            outline(self.assets['game']['health_bar'], (8, 6), self.world.window.ui_surf, pygame.Color(22, 19, 35).lerp((254, 254, 215), (math.sin(self.time * 0.1) + 1) * 0.5).lerp((194, 89, 64), (math.sin(self.time * 0.037) + 1) * 0.5))
         target_health = self.player.health if self.player.ad >= 120 else 0
         self.player_health += (target_health - self.player_health) * 0.2 * self.dt
         surf = pygame.Surface((32, 8))
@@ -55,7 +55,7 @@ class App(e.Pygmy):
         pygame.draw.rect(surf, self.low_color_bottom.lerp(self.high_color_bottom, max(0, min(1, self.player_health / self.player.max_health))), (3, 4, 27 * max(0, min(1, self.player_health / self.player.max_health)), 2))
         surf.set_colorkey((0, 255, 0))
         surf.blit(self.assets['game']['health_bar'], (0, 0))
-        self.world.window.screen.blit(surf, (8, 6))
+        self.world.window.ui_surf.blit(surf, (8, 6))
 
     def update(self, screen, scroll):
         if self.player.update():
@@ -63,6 +63,16 @@ class App(e.Pygmy):
         #self.item.box.draw(screen, scroll)
         self.player.draw(screen, scroll)
         self.light.update(self.player.pos)
+        for fly in self.fire_flies:
+            fly[0][0] += math.cos(fly[1]) * fly[2] * self.dt * 0.05
+            fly[0][1] += math.sin(fly[1]) * fly[2] * self.dt * 0.05
+            fly[1] += fly[3] * self.dt * 0.005
+            if random.random() * 4 < self.dt:
+                fly[3] = random.random() * 2 * random.choice([-1, 1])
+                fly[2] = random.random() * 5 + 5
+            loc = (((fly[0][0] - scroll[0]) % screen.get_width()) + scroll[0], ((fly[0][1] - scroll[1]) % screen.get_height()) + scroll[1])
+            self.lighting.add_light(loc, [math.sin(self.time * 0.01 + fly[5] * 1000) * 2 + 5, math.sin(self.time * 0.01 + fly[5] * 1000) * 2 + 5], (221, 172, 70))
+
         #self.item.update(screen, scroll)
         #self.world.tile_map.leaves(screen, scroll)
         #self.world.tile_map.physics_map.draw(screen, scroll)
