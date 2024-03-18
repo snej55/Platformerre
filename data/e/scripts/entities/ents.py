@@ -82,7 +82,7 @@ class HealthBar:
 
 #  Entity parent class
 class Entity:
-    def __init__(self, pos, dimensions, anim_offset, app, e_type, fiend=True, enemy=None, mask_collide_offset=None, hurt_recovery=1, hurt_flash=5, health=10):
+    def __init__(self, pos, dimensions, anim_offset, app, e_type, fiend=True, enemy=None, mask_collide_offset=None, hurt_recovery=1, hurt_flash=5, health=10, glow=False):
         self.pos = pygame.Vector2(pos)
         self.dimensions = pygame.Vector2(dimensions)
         self.anim_offset = pygame.Vector2(anim_offset)
@@ -115,6 +115,10 @@ class Entity:
             self.quad = self.app.world.entity_manager.get_quad(self.pos)
             self.quad.append(self)
         self.name = type(self).__name__.lower()
+        self.glow = False
+        if glow:
+            self.glow = True
+            self.light = self.app.lighting.add_light(glow[0], glow[1], glow[2])
 
     def collide_mask(self, mask, pos):
         offset = (pos[0] - self.pos.x, pos[1] - self.pos.y)
@@ -234,6 +238,8 @@ class Entity:
                 self.pos.y = entity_rect.y
 
         self.movement.y += self.gravity * self.app.dt
+        if self.glow:
+            self.light.update(self.pos)
         return self.health < 0 or self.app.world.tile_map.physics_map.danger_at(self.rect())
 
     def damage(self, intt=1):
@@ -254,7 +260,6 @@ inAir = lambda entity: entity.falling > entity.fall_buff
 xMotion = lambda entity: abs(entity.movement[0]) > 0.025
 grounded = lambda entity: entity.grounded < entity.ground_buff
 
-# TODO: MAKE A SWORD FOR THIS DUDE!!
 class PlayerBase(Entity):
     def __init__(self, pos, dimensions, anim_offset, app, air_friction=0.56, friction=0.54, vx=1.8, vj=-3, jump_buff=10, double_jump=1, gravity_apr=[0.2,0.4,0.1,1,0], out_dim=0.1,
              grounded_tim=2, jump_tim=1, fall_buff=6, ground_buff=24, jump_animbuff=70, mass=0.8):

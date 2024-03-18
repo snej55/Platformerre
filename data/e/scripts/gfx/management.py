@@ -128,6 +128,7 @@ class GFXManager:
             glow[0][1] += glow[1][1] * self.app.dt * glow[2] / glow[3]
             glow[1][1] += 0.1 * self.app.dt
             circle_surf = self.circle_surf(glow[2], glow[4])
+            self.app.lighting.add_light(glow[0], [glow[2] * 5, glow[2] * 5], glow[4])
             surf.blit(circle_surf, (glow[0][0] - scroll[0], glow[0][1] - scroll[1]), special_flags=pygame.BLEND_RGBA_ADD)
             glow[2] -= 0.05 * self.app.dt
             if glow[2] <= 0:

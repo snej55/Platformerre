@@ -7,8 +7,8 @@ class Lighting:
         self.light_surf = pygame.Surface(self.app.world.window.screen.get_size())
         self.lights = []
     
-    def add_light(self, pos, dimensions):
-        light = Light(pos, self.app, self, dimensions)
+    def add_light(self, pos, dimensions, color=None):
+        light = Light(pos, self.app, self, dimensions, color=color)
         self.lights.append(light)
         return light
     
@@ -20,10 +20,14 @@ class Lighting:
         return self.light_surf
 
 class Light:
-    def __init__(self, pos, app, lighting, dimensions):
+    def __init__(self, pos, app, lighting, dimensions, color=None):
         self.app = app
         self.lighting = lighting
         self.light_surf = pygame.transform.scale(lighting.light, dimensions).convert()
+        if color:
+            self.light_surf = pygame.Surface(self.light_surf.get_size())
+            self.light_surf.fill(color)
+            self.light_surf.blit(pygame.transform.scale(lighting.light, dimensions).convert(), (0, 0), area=None, special_flags=pygame.BLEND_RGBA_MULT) # pygame.BLEND_RGBA_MIN also works
         self.dimensions = pygame.Vector2(dimensions)
         self.pos = pygame.Vector2(pos)
     

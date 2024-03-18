@@ -64,10 +64,12 @@ class AnimatedItem(Item):
         self.animation = animation
         self.frame = 0
         self.speed = speed
+        self.light = self.app.lighting.add_light(pos, [20, 20], (221, 172, 70))
     
     def update(self, *args, **kwargs):
         self.frame += self.speed * self.app.dt
         self.img = self.animation[math.floor(self.frame)%len(self.animation)]
+        self.light.update(self.pos)
         return super().update(*args, **kwargs)
 
 class ItemManager:

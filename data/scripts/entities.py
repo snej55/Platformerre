@@ -46,7 +46,7 @@ class Player(PlayerBase):
 
 class Slime(Entity):
     def __init__(self, pos, dimensions, anim_offset, app, color='green', slime=(99, 159, 91)):
-        super().__init__(pos, dimensions, anim_offset, app, e_type='slime')
+        super().__init__(pos, dimensions, anim_offset, app, e_type='slime', glow=[pos, [100, 100], (219, 188, 150)])
         self.name += f'_{color}'
         self.slime = slime
         self.grounded = 0
