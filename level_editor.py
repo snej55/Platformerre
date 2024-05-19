@@ -2,6 +2,8 @@
 
 import pygame, math, time, sys
 
+from tkinter import filedialog
+
 from data.e.scripts.bip import *
 from data.e.scripts.assets import *
 from data.e.scripts.tools.ui.box import Box
@@ -15,7 +17,7 @@ class Editor():
         self.config = config
         self.mode = 'edit'
         self.render_scale = pygame.Vector2(RENDER_SCALE, RENDER_SCALE)
-        self.display = pygame.display.set_mode(WIN_DIMENSIONS)
+        self.display = pygame.display.set_mode((1000, 800))
         self.screen = pygame.Surface((self.display.get_width() / self.render_scale.x, self.display.get_height() / self.render_scale.y))
         self.clock = pygame.time.Clock()
         self.dt = 1
@@ -49,7 +51,8 @@ class Editor():
         self.solid = True
         self.title = 'Fancy new level editor'
         self.tile_map = TileMap(self)
-        self.tile_map.load('data/maps/0.json', mode='edit')
+        self.path = filedialog.askopenfilename(filetypes=[('JSON save data', '*.json')])
+        self.tile_map.load(self.path, mode='edit')
         self.panel = Box(self, (0, 0, self.screen.get_width() * 0.333, self.screen.get_height()), (100, 100, 100), alpha=150, stroke=(255, 255, 255))
         self.filt = pygame.Surface(self.screen.get_size())
         self.filt.fill((50, 50, 50))
@@ -137,6 +140,7 @@ class Editor():
         if self.keys[pygame.K_RCTRL] and (pygame.K_d in self.toggles):
             self.panel.width = not self.panel.width
         self.panel.draw(self.screen)
+        pygame.draw.line(self.screen, (255, 255, 255, 50), (self.panel.rect.width, 0), (self.panel.rect.width, self.screen.get_width()), 2)
         for tile in self.assets['edit'][self.tile_list[self.tile_group]]:
             self.panel_tile_dim[0] = max(self.panel_tile_dim[0], tile.get_height())
             self.panel_tile_dim[1] = max(self.panel_tile_dim[1], tile.get_height())
@@ -220,7 +224,11 @@ class Editor():
                 self.layer = (self.layer - 1) % len(self.tile_map.layers)
             print(self.layer)
         if self.keys[pygame.K_LCTRL] and self.keys[pygame.K_s]:
-            self.tile_map.save('data/maps/0.json')
+            self.path = filedialog.askopenfilename(filetypes=[('JSON save data', '*.json')])
+            self.tile_map.save(self.path)
+        if self.keys[pygame.K_LCTRL] and self.keys[pygame.K_e]:
+            self.path = filedialog.askopenfilename(filetypes=[('JSON save data', '*.json')])
+            self.tile_map.load(self.path, mode='edit')
         if pygame.K_n in self.toggles and self.keys[pygame.K_LCTRL]:
             self.tile_map.layers.append(Layer(self.tile_map, {'tile_map': {}, 'decor': [], 'solid': False, 'render_scale': 1.0}, self, mode='edit', index=len(self.tile_map.layers)))
             print(len(self.tile_map.layers))

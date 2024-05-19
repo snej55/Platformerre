@@ -1,1 +1,1 @@
-{"layers": [{"tile_map": {}, "decor": [], "render_scale": 1.0}], "physics": {}}
+{"layers": [{"tile_map": {"11;6": {"pos": [11.0, 6.0], "dimensions": [8.0, 8.0], "rect_offset": [0.0, 0.0], "mode": "large_decor", "variant": 0}}, "decor": [], "render_scale": 1.0}], "physics": {}}

@@ -79,20 +79,20 @@ class App(e.Pygmy):
         if pygame.K_p in self.toggles:
             print(self.player.pos)
             print(f'''sparks: {len(self.world.gfx_manager.sparks)}
-smoke: {len(self.world.gfx_manager.smoke)}
-impact: {len(self.world.gfx_manager.impact)}
-shockwaves: {len(self.world.gfx_manager.shockwaves)}
-kick_up: {len(self.world.gfx_manager.kick_up)}
-shadows: {len(self.world.gfx_manager.shadows)}
-glow_dust: {len(self.world.gfx_manager.glow_dust)}
-slime: {len(self.world.gfx_manager.slime)}
-glow: {len(self.world.gfx_manager.glow)}
-particles: {len([particle for particle in self.world.gfx_manager.particles if particle.particle_type == 'particle'])}
-splat: {len(self.world.gfx_manager.splat)}
-trails: {len(self.world.gfx_manager.trails)}
-timed_coins: {len(self.world.gfx_manager.timed_coins)}
-glow_circle: {len(self.world.gfx_manager.glow_circle)}
-''')
+                smoke: {len(self.world.gfx_manager.smoke)}
+                impact: {len(self.world.gfx_manager.impact)}
+                shockwaves: {len(self.world.gfx_manager.shockwaves)}
+                kick_up: {len(self.world.gfx_manager.kick_up)}
+                shadows: {len(self.world.gfx_manager.shadows)}
+                glow_dust: {len(self.world.gfx_manager.glow_dust)}
+                slime: {len(self.world.gfx_manager.slime)}
+                glow: {len(self.world.gfx_manager.glow)}
+                particles: {len([particle for particle in self.world.gfx_manager.particles if particle.particle_type == 'particle'])}
+                splat: {len(self.world.gfx_manager.splat)}
+                trails: {len(self.world.gfx_manager.trails)}
+                timed_coins: {len(self.world.gfx_manager.timed_coins)}
+                glow_circle: {len(self.world.gfx_manager.glow_circle)}
+                ''')
             #self.player.damage(5)
             self.blaster.fire(angle=random.random() - 0.5)
             #for layer in self.world.tile_map.layers:
