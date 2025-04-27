@@ -1,4 +1,4 @@
-# Platormerre
+# Platformerre
 This project is a vfx demo and further test for my pygame (pygame-ce) framework (Pygmy? no name yet). So far it utilizes mainly my framework for handling entities, collisions, grass and other various vfx. This project (although a simple platformer) will hopefully allow me to continue to update and expand my framework to include stuff such as water, cloth physics with verlet integration and ui. These have not been added yet.
 
 ## Run:
