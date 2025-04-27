@@ -82,7 +82,6 @@ class Sword:
                 self.attacking = False
                 self.attacked = 4
                 self.damp = 0.4
-        if self.attacking:
             if self.shadow_release > 2 and self.slash:
                 if self.slash.animation.frame < 13:
                     self.shadow_release = 0
@@ -116,7 +115,6 @@ class Sword:
             img_copy = pygame.transform.flip(img_copy, True, False)
             self.flipped = True
             offset[0] -= 3
-            offset[1] += 0
         surf.blit(img_copy, (self.pos[0] + int(self.img.get_width() / 2) - int(img_copy.get_width() / 2) - scroll[0] + offset[0], self.pos[1] + int(self.img.get_height() / 2) - int(img_copy.get_height() / 2) - scroll[1] + offset[1]))
         if self.slash:
             self.slash.draw(surf, scroll)
